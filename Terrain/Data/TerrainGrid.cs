@@ -10,6 +10,11 @@ namespace Terrain.Data
     {
         public List<TerrainTile> Tiles { get; private set; }
 
+        public int Left { get; private set; }
+        public int Right { get; private set; }
+        public int Top { get; private set; }
+        public int Bottom { get; private set; }
+
         public TerrainGrid()
         {
             Tiles = new List<TerrainTile>();
@@ -19,7 +24,15 @@ namespace Terrain.Data
         {
             Tiles = tiles.ToList();
         }
-        
+
+        private void GrowBounds(TerrainTile tile)
+        {
+            if (tile.Left < Left) { Left = tile.Left; }
+            if (tile.Right > Right) { Right = tile.Right; }
+            if (tile.Top > Top) { Top = tile.Top; }
+            if (tile.Bottom < Bottom) { Bottom = tile.Bottom; }
+        }
+
         public void AddTile(TerrainTile tile)
         {
             foreach(var existingTile in Tiles)
@@ -30,8 +43,12 @@ namespace Terrain.Data
                 }
             }
             Tiles.Add(tile);
+            GrowBounds(tile);
         }
 
-       
+        public float[][] ToMutliArray()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

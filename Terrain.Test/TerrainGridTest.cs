@@ -27,6 +27,24 @@ namespace Terrain.Test
 
         }
 
+        [TestMethod]
+        public void AddTile_ShouldUpdateBounds()
+        {
+            var tileData1 = new float[] { 0.0f, 0.0f };
+            var tileData2 = new float[] { 0.0f, 0.0f };
+            var tile1 = new TerrainTile(new float[][] { tileData1 }, 10, 0, 0);
+            var tile2 = new TerrainTile(new float[][] { tileData2 }, 10, 20, 10);
+
+            var grid = new TerrainGrid();
+            grid.AddTile(tile1);
+            grid.AddTile(tile2);
+
+
+            Assert.AreEqual(0, grid.Left);
+            Assert.AreEqual(40, grid.Right);
+            Assert.AreEqual(20, grid.Top);
+            Assert.AreEqual(0, grid.Bottom);
+        }
 
     }
 }
