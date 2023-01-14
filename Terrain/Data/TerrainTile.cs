@@ -43,6 +43,22 @@
 
             return (a_left <= b_right && a_right >= b_left && a_bottom <= b_top && a_top >= b_bottom);
         }
-       
+
+        public bool OverlapsWith(TerrainTile other)
+        {
+            int a_left = X;
+            int a_bottom = Y;
+            int a_right = X + (CellSize * NumColumns);
+            int a_top = Y + (CellSize * NumRows);
+
+            int b_left = other.X;
+            int b_bottom = other.Y;
+            int b_right = other.X + (other.CellSize * other.NumColumns);
+            int b_top = other.Y + (other.CellSize * other.NumRows);
+
+            return (a_left < b_right && a_right > b_left && a_bottom < b_top && a_top > b_bottom);
+        }
+
+
     }
 }

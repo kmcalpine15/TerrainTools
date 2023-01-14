@@ -69,5 +69,28 @@ namespace Terrain.Test
 
             Assert.AreEqual(expected, tile1.CollidesWith(tile2));
         }
+
+
+        [DataTestMethod]
+        [DataRow(new float[] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, new float[] { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f }, 0, 0, 50, 0, false)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 0, 0, 20, 0, false)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 0, 0, 30, 0, false)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 0, 0, 20, 10, false)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 20, 10, 0, 0, false)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 0, 0, 10, 0, true)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 0, 0, 0, 9, true)]
+        [DataRow(new float[] { 0.0f, 0.0f }, new float[] { 0.0f, 0.0f }, 0, 0, 0, 10, false)]
+        public void OverlapsWith_ShouldReturnTrueForOverlappingTilesOnly(float[] tileData1, float[] tileData2, int tile1X, int tile1Y, int tile2X, int tile2Y, bool expected)
+        {
+            float[][] data1 = new float[1][];
+            data1[0] = tileData1;
+            TerrainTile tile1 = new TerrainTile(data1, 10, tile1X, tile1Y);
+
+            float[][] data2 = new float[1][];
+            data2[0] = tileData2;
+            TerrainTile tile2 = new TerrainTile(data2, 10, tile2X, tile2Y);
+
+            Assert.AreEqual(expected, tile1.OverlapsWith(tile2));
+        }
     }
 }
