@@ -21,7 +21,6 @@ namespace Terrain.Test
             Assert.AreEqual(6, tile.Y);
         }
 
-
         [DataTestMethod]
         [DataRow(0.0f, 1000.0f, new float[] { 500.0f, 100.0f, 900.0f }, new float[] { 0.5f, 0.1f, 0.9f })]
         [DataRow(-1000.0f, 1000.0f, new float[] { 0.0f, -500.0f, 500.0f }, new float[] { 0.5f, 0.25f, 0.75f })]

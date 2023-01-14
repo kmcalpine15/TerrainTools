@@ -8,6 +8,10 @@
         public float[][] Data { get; private set; }
         public int X { get; private set; }
         public int Y { get; private set; }
+        public int Left { get { return X; } }
+        public int Right { get { return X + (CellSize * NumColumns); } }
+        public int Bottom { get { return Y; } }
+        public int Top { get { return Y + (CellSize * NumRows); } }
 
         public TerrainTile(float[][]data, int cellSize, int x, int y)
         {
@@ -31,32 +35,13 @@
         
         public bool CollidesWith(TerrainTile other)
         {
-            int a_left = X;
-            int a_bottom = Y;
-            int a_right = X + (CellSize * NumColumns);
-            int a_top = Y + (CellSize * NumRows);
-
-            int b_left = other.X;
-            int b_bottom = other.Y;
-            int b_right = other.X + (other.CellSize * other.NumColumns);
-            int b_top = other.Y + (other.CellSize * other.NumRows);
-
-            return (a_left <= b_right && a_right >= b_left && a_bottom <= b_top && a_top >= b_bottom);
+            return (Left <= other.Right && Right >= other.Left && Bottom <= other.Top && Top >= other.Bottom);
         }
 
         public bool OverlapsWith(TerrainTile other)
         {
-            int a_left = X;
-            int a_bottom = Y;
-            int a_right = X + (CellSize * NumColumns);
-            int a_top = Y + (CellSize * NumRows);
-
-            int b_left = other.X;
-            int b_bottom = other.Y;
-            int b_right = other.X + (other.CellSize * other.NumColumns);
-            int b_top = other.Y + (other.CellSize * other.NumRows);
-
-            return (a_left < b_right && a_right > b_left && a_bottom < b_top && a_top > b_bottom);
+            return (Left < other.Right && Right > other.Left && Bottom < other.Top && Top > other.Bottom);
+            //return (a_left < b_right && a_right > b_left && a_bottom < b_top && a_top > b_bottom);
         }
 
 
