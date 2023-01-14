@@ -38,5 +38,15 @@ namespace Terrain.Test
                 Assert.AreEqual(expected[i], resultRow[i]);
             }
         }
+        [TestMethod]
+        public void Normalise_ShouldThrowIfMinGreatherThanMax()
+        {
+            float[][] data = new float[1][];
+            data[0]  = new float[3];
+             var tile = new TerrainTile(data, 50);
+
+            Assert.ThrowsException<ArgumentException>(() => tile.Normalise(1000.0f, 500.0f));
+             
+        }
     }
 }

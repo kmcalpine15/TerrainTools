@@ -23,7 +23,12 @@ namespace Terrain.Data
 
         public TerrainTile Normalise(float globalMin, float globalMax)
         {
-            throw new NotImplementedException(); 
+            if (globalMax < globalMin) { throw new ArgumentException("globalMin must be > than globalMax"); }
+                
+            float range = globalMax - globalMin;
+            var resultData = Data.Select(row => row.Select(height => (height - globalMin) / range).ToArray()).ToArray();
+
+            return new TerrainTile(resultData, CellSize);
         }
         
     }
