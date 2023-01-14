@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Terrain.Data
 {
-    internal class TerrainGrid
+    public class TerrainGrid
     {
         public List<TerrainTile> Tiles { get; private set; }
 
@@ -15,9 +15,23 @@ namespace Terrain.Data
             Tiles = new List<TerrainTile>();
         }
 
+        public TerrainGrid(IEnumerable<TerrainTile> tiles)
+        {
+            Tiles = tiles.ToList();
+        }
+        
         public void AddTile(TerrainTile tile)
         {
-            
+            foreach(var existingTile in Tiles)
+            {
+                if(tile.OverlapsWith(existingTile)) 
+                {
+                    throw new ArgumentException("Tile overlaps with existing tile");
+                }
+            }
+            Tiles.Add(tile);
         }
+
+       
     }
 }
