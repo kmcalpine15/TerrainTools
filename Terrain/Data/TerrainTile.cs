@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace Terrain.Data
 {
-    public class TerrainGrid
+    public class TerrainTile
     {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int CellSize { get; set; }
+        public int NumColumns { get; private set; }
+        public int NumRows { get; private set; }
+        public int CellSize { get; private set; }
         public float[][] Data { get; private set; }
 
-        public TerrainGrid()
+        public TerrainTile(float[][]data, int cellSize)
         {
+            CellSize = cellSize;
+            Data = data;
+            NumColumns = Data[0].Length;
+            NumRows = Data.Length;
+        }
 
+        public TerrainTile Normalise(float globalMin, float globalMax)
+        {
+            throw new NotImplementedException(); 
         }
         
     }
