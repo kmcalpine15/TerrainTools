@@ -28,16 +28,16 @@ namespace Terrain.Writers
                 }
             }
 
-            string metadataPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".txt");
-            using (var fle = new StreamWriter(metadataPath))
-            {
-                fle.Write($"width:{data.NumColumns}\n");
-                fle.Write($"height:{data.NumRows}\n");
-                fle.Write($"left:{data.CoordinateSpace.Left}\n");
-                fle.Write($"right:{data.CoordinateSpace.Right}\n");
-                fle.Write($"top:{data.CoordinateSpace.Top}\n");
-                fle.Write($"bottom:{data.CoordinateSpace.Bottom}\n");
-            }
+            //string metadataPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".txt");
+            //using (var fle = new StreamWriter(metadataPath))
+            //{
+            //    fle.Write($"width:{data.NumColumns}\n");
+            //    fle.Write($"height:{data.NumRows}\n");
+            //    fle.Write($"left:{data.CoordinateSpace.Left}\n");
+            //    fle.Write($"right:{data.CoordinateSpace.Right}\n");
+            //    fle.Write($"top:{data.CoordinateSpace.Top}\n");
+            //    fle.Write($"bottom:{data.CoordinateSpace.Bottom}\n");
+            //}
         }
     }
 }

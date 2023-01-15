@@ -6,6 +6,8 @@ namespace Terrain.Data
     {
         public int NumColumns { get; private set; }
         public int NumRows { get; private set; }
+        public int XIndex { get; set; }
+        public int YIndex { get; set; }
         public int CellSize { get; private set; }
         public float[][] Data { get; private set; }
         public CoordinateSpace CoordinateSpace { get; private set; }
@@ -18,6 +20,19 @@ namespace Terrain.Data
             NumColumns = Data[0].Length;
             NumRows = Data.Length;
             CoordinateSpace = new CoordinateSpace(x, y, x + (NumColumns * CellSize), y + (NumRows * CellSize));
+            XIndex = 0;
+            YIndex = 0;
+        }
+
+        public TerrainTile(float[][]data, int cellSize, int x, int y, int xIndex, int yIndex)
+        {
+            CellSize = cellSize;
+            Data = data;
+            NumColumns = Data[0].Length;
+            NumRows = Data.Length;
+            CoordinateSpace = new CoordinateSpace(x, y, x + (NumColumns * CellSize), y + (NumRows * CellSize));
+            XIndex = xIndex;
+            YIndex = yIndex;
         }
 
         public TerrainTile Normalise(float globalMin, float globalMax)
@@ -81,7 +96,13 @@ namespace Terrain.Data
                         }
                     }
 
-                    results.Add(new TerrainTile(data, CellSize, CoordinateSpace.MinX + (tileX * newTileSize * CellSize), CoordinateSpace.MinY + (tileY * newTileSize * CellSize)));
+                    results.Add(new TerrainTile(data,
+                        CellSize,
+                        CoordinateSpace.MinX + (tileX * newTileSize * CellSize),
+                        CoordinateSpace.MinY + (tileY * newTileSize * CellSize),
+                        tileX+1,
+                        numTilesY-1-tileY+1
+                    ));
                 }
             }
 
