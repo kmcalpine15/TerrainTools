@@ -6,8 +6,6 @@
         public int NumRows { get; private set; }
         public int CellSize { get; private set; }
         public float[][] Data { get; private set; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
         public CoordinateSpace CoordinateSpace { get; private set; }
         
 
@@ -27,7 +25,7 @@
             float range = globalMax - globalMin;
             var resultData = Data.Select(row => row.Select(height => (height - globalMin) / range).ToArray()).ToArray();
 
-            return new TerrainTile(resultData, CellSize, X, Y);
+            return new TerrainTile(resultData, CellSize, CoordinateSpace.MinX, CoordinateSpace.MinY);
         }
         
         public bool CollidesWith(TerrainTile other)

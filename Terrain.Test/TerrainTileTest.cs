@@ -17,8 +17,8 @@ namespace Terrain.Test
             Assert.AreEqual(data, tile.Data);
             Assert.AreEqual(2, tile.NumRows);
             Assert.AreEqual(4, tile.NumColumns);
-            Assert.AreEqual(5, tile.X);
-            Assert.AreEqual(6, tile.Y);
+            Assert.AreEqual(5, tile.CoordinateSpace.MinX);
+            Assert.AreEqual(6, tile.CoordinateSpace.MinY);
         }
 
         [DataTestMethod]
