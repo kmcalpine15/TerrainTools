@@ -31,6 +31,12 @@ namespace Terrain.Loaders
             CoordinateTransform transform = new CoordinateTransform(worldSpace, dataSpace);
 
             float[][] data = new float[dataSpace.Height][];
+            for(int i=0; i<dataSpace.Height; i++)
+            {
+                data[i] = new float[dataSpace.Width];
+            }
+
+
             foreach(var tile in tiles)
             {
                 for(int y=0; y<tile.Data.Length; y++)
@@ -40,11 +46,6 @@ namespace Terrain.Loaders
                     {
                         Coordinate worldCoord = new Coordinate(tile.CoordinateSpace.MinX + (x * tile.CellSize), yCoord);
                         Coordinate dataCoord = transform.Transform(worldCoord);
-
-                        if (data[dataCoord.Y] == null)
-                        {
-                            data[dataCoord.Y] = new float[dataSpace.Width];
-                        }
 
                         data[dataCoord.Y][dataCoord.X] = tile.Data[y][x];
                     }
@@ -85,6 +86,7 @@ namespace Terrain.Loaders
                 parsedData.Add(row);
             }
 
+            parsedData.Reverse();
             return new TerrainTile(parsedData.Select(r => r.ToArray()).ToArray(), cellSize, xllCorner, yllCorner);
         }
 
