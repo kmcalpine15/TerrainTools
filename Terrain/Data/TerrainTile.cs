@@ -1,4 +1,6 @@
-﻿namespace Terrain.Data
+﻿using System.Net.Http.Headers;
+
+namespace Terrain.Data
 {
     public class TerrainTile
     {
@@ -46,5 +48,44 @@
         }
 
 
+        public IEnumerable<TerrainTile> Split(int newTileSize,float noDataValue=float.MinValue)
+        {
+            int numTilesX = NumColumns % newTileSize > 0 ? (NumColumns / newTileSize) + 1 : NumColumns / newTileSize;
+            int numTilesY = NumRows % newTileSize > 0 ? (NumRows / newTileSize) + 1 : NumRows / newTileSize;
+
+            List<TerrainTile> results = new List<TerrainTile>();
+
+            for (int tileY = 0; tileY < numTilesY; tileY++)
+            {
+                for (int tileX = 0; tileX < numTilesX; tileX++)
+                {
+                    float[][] data = new float[newTileSize][];
+                    int yStart = tileY * newTileSize;
+                    int xStart = tileX * newTileSize;
+
+                    for (int y = 0; y < newTileSize; y++)
+                    {
+                        data[y] = new float[newTileSize];
+                        for (int x = 0; x < newTileSize; x++)
+                        {
+                            int dataX = xStart + x;
+                            int dataY = yStart + y;
+                            if (dataX < NumColumns && dataY < NumRows)
+                            {
+                                data[y][x] = Data[dataY][dataX];
+                            }
+                            else
+                            {
+                                data[y][x] = noDataValue;
+                            }
+                        }
+                    }
+
+                    results.Add(new TerrainTile(data, CellSize, CoordinateSpace.MinX + (tileX * newTileSize * CellSize), CoordinateSpace.MinY + (tileY * newTileSize * CellSize)));
+                }
+            }
+
+            return results;
+        }
     }
 }
