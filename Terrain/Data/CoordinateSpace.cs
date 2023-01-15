@@ -8,10 +8,10 @@ namespace Terrain.Data
 {
     public class CoordinateSpace
     {
-        public int MinX { get; private set; }
-        public int MinY { get; private set; }
-        public int MaxX { get; private set; }
-        public int MaxY { get; private set; }
+        public int MinX { get; set; }
+        public int MinY { get; set; }
+        public int MaxX { get; set; }
+        public int MaxY { get; set; }
         public int Width { get { return MaxX - MinX; } }
         public int Height { get { return MaxY - MinY; } }
         public int Left { get { return MinX; } }
@@ -25,6 +25,14 @@ namespace Terrain.Data
             MinY = minY;
             MaxX = maxX;
             MaxY = maxY;
+        }
+        
+        public void GrowBounds(CoordinateSpace other)
+        {
+            if (other.MinX < MinX) { MinX = other.MinX; }
+            if (other.MaxX > MaxX) { MaxX = other.MaxX; }
+            if (other.MaxY > MaxY) { MaxY = other.MaxY; }
+            if (other.MinY < MinY) { MinY = other.MinY; }
         }
     }
 }

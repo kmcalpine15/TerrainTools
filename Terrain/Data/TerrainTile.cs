@@ -8,10 +8,8 @@
         public float[][] Data { get; private set; }
         public int X { get; private set; }
         public int Y { get; private set; }
-        public int Left { get { return X; } }
-        public int Right { get { return X + (CellSize * NumColumns); } }
-        public int Bottom { get { return Y; } }
-        public int Top { get { return Y + (CellSize * NumRows); } }
+        public CoordinateSpace CoordinateSpace { get; private set; }
+        
 
         public TerrainTile(float[][]data, int cellSize, int x, int y)
         {
@@ -19,8 +17,7 @@
             Data = data;
             NumColumns = Data[0].Length;
             NumRows = Data.Length;
-            X = x;
-            Y = y;
+            CoordinateSpace = new CoordinateSpace(x, y, x + (NumColumns * CellSize), y + (NumRows * CellSize));
         }
 
         public TerrainTile Normalise(float globalMin, float globalMax)
@@ -35,12 +32,18 @@
         
         public bool CollidesWith(TerrainTile other)
         {
-            return (Left <= other.Right && Right >= other.Left && Bottom <= other.Top && Top >= other.Bottom);
+            return (CoordinateSpace.Left <= other.CoordinateSpace.Right &&
+                CoordinateSpace.Right >= other.CoordinateSpace.Left &&
+                CoordinateSpace.Bottom <= other.CoordinateSpace.Top &&
+                CoordinateSpace.Top >= other.CoordinateSpace.Bottom);
         }
 
         public bool OverlapsWith(TerrainTile other)
         {
-            return (Left < other.Right && Right > other.Left && Bottom < other.Top && Top > other.Bottom);
+            return (CoordinateSpace.Left < other.CoordinateSpace.Right &&
+                CoordinateSpace.Right > other.CoordinateSpace.Left &&
+                CoordinateSpace.Bottom < other.CoordinateSpace.Top &&
+                CoordinateSpace.Top > other.CoordinateSpace.Bottom);
             //return (a_left < b_right && a_right > b_left && a_bottom < b_top && a_top > b_bottom);
         }
 
