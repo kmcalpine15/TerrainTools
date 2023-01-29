@@ -108,5 +108,86 @@ namespace Terrain.Data
 
             return results;
         }
+
+        public IEnumerable<TerrainTile> SplitAndHalfSize(int newTileSize, float noDataValue = float.MinValue)
+        {
+            int numTilesX = (NumColumns /2) % newTileSize > 0 ? (NumColumns / 2 / newTileSize) + 1 : NumColumns /2  / newTileSize;
+            int numTilesY = (NumRows/2) % newTileSize > 0 ? (NumRows / 2 / newTileSize) + 1 : NumRows / 2 / newTileSize;
+
+            List<TerrainTile> results = new List<TerrainTile>();
+
+            for (int tileY = 0; tileY < numTilesY; tileY++)
+            {
+                for (int tileX = 0; tileX < numTilesX; tileX++)
+                {
+                    float[][] data = new float[newTileSize][];
+                    int yStart = tileY * newTileSize;
+                    int xStart = tileX * newTileSize;
+
+                    for (int y = 0; y < newTileSize; y++)
+                    {
+                        data[y] = new float[newTileSize];
+                        for (int x = 0; x < newTileSize; x++)
+                        {
+                            int dataX = xStart + x;
+                            int dataY = yStart + y;
+                            if (dataX*2 < NumColumns && dataY*2 < NumRows)
+                            {
+                                data[y][x] = Data[dataY*2][dataX*2];
+                            }
+                            else
+                            {
+                                data[y][x] = noDataValue;
+                            }
+                        }
+                    }
+
+                    results.Add(new TerrainTile(data,
+                        CellSize,
+                        CoordinateSpace.MinX + (tileX * newTileSize * CellSize),
+                        CoordinateSpace.MinY + (tileY * newTileSize * CellSize),
+                        tileX + 1,
+                        numTilesY - 1 - tileY + 1
+                    ));
+                }
+            }
+
+            return results;
+        }
+
+        public TerrainTile SubTile(int x, int y, int width, int height, float noDataValue = float.MinValue)
+        {
+            float[][] data = new float[height][];
+            for (int i = 0; i < height; i++)
+            {
+                data[i] = new float[width];
+                for (int j = 0; j < width; j++)
+                {
+
+                    if (j < NumColumns && i < NumRows)
+                    {
+                        data[i][j] = Data[i][j];
+                    }
+                    else
+                    {
+                        data[i][j] = noDataValue;
+                    }
+
+                }
+            }
+
+            return new TerrainTile(data, CellSize, x, y);
+        }
+
+        public TerrainTile Resize(int newTileSize)
+        {
+            float[][] data = new float[newTileSize][];
+            
+
+            return new TerrainTile(data,
+                CellSize,
+                CoordinateSpace.MinX,
+                CoordinateSpace.MinY);
+        }
     }
 }

@@ -29,5 +29,14 @@ namespace Terrain.Data
                 (int)Math.Round((coordinate.Y - From.MinY) * _yScale + To.MinY)
             );
         }
+
+        public Coordinate Transform(Point point)
+        {
+            return new Coordinate(
+                (int)Math.Round((point.X - From.MinX) * _xScale + To.MinX),
+                (int)Math.Round((point.Y - From.MinY) * _yScale + To.MinY)
+            );
+        }
+
     }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "R16ToPng": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\OSMapData\\RawHeightmap\\ 4033 4033"
+      "commandLineArgs": "D:\\OSMapData\\RawHeightmap 4033 4033"
     }
   }
 }
