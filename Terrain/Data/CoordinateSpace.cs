@@ -8,18 +8,18 @@ namespace Terrain.Data
 {
     public class CoordinateSpace
     {
-        public int MinX { get; set; }
-        public int MinY { get; set; }
-        public int MaxX { get; set; }
-        public int MaxY { get; set; }
-        public int Width { get { return MaxX - MinX; } }
-        public int Height { get { return MaxY - MinY; } }
-        public int Left { get { return MinX; } }
-        public int Right { get { return MaxX; } }
-        public int Top { get { return MaxY; } }
-        public int Bottom { get { return MinY; } }
+        public double MinX { get; set; }
+        public double MinY { get; set; }
+        public double MaxX { get; set; }
+        public double MaxY { get; set; }
+        public double Width { get { return MaxX - MinX; } }
+        public double Height { get { return MaxY - MinY; } }
+        public double Left { get { return MinX; } }
+        public double Right { get { return MaxX; } }
+        public double Top { get { return MaxY; } }
+        public double Bottom { get { return MinY; } }
 
-        public CoordinateSpace(int minX, int minY, int maxX, int maxY)
+        public CoordinateSpace(double minX, double minY, double maxX, double maxY)
         {
             MinX = minX;
             MinY = minY;
