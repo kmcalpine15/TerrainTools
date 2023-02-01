@@ -16,10 +16,10 @@ namespace Terrain.Test
 
             CoordinateTransform xf = new CoordinateTransform(from, to);
 
-            Coordinate testCoord = new Coordinate(coordinate[0], coordinate[1]);
-            Coordinate expectedCoord = new Coordinate(expected[0], expected[1]);
+            Point testCoord = new Point(coordinate[0], coordinate[1]);
+            Point expectedCoord = new Point(expected[0], expected[1]);
 
-            Coordinate result = xf.Transform(testCoord);
+            Point result = xf.Transform(testCoord);
 
             Assert.AreEqual(expectedCoord, result);
         }

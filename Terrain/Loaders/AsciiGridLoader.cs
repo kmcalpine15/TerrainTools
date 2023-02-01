@@ -30,10 +30,10 @@ namespace Terrain.Loaders
             CoordinateSpace dataSpace = new CoordinateSpace(0, 0,worldSpace.Width / cellSize, worldSpace.Height / cellSize);
             CoordinateTransform transform = new CoordinateTransform(worldSpace, dataSpace);
 
-            float[][] data = new float[dataSpace.Height][];
+            float[][] data = new float[(int)dataSpace.Height][];
             for(int i=0; i<dataSpace.Height; i++)
             {
-                data[i] = new float[dataSpace.Width];
+                data[i] = new float[(int)dataSpace.Width];
             }
 
 
@@ -41,13 +41,13 @@ namespace Terrain.Loaders
             {
                 for(int y=0; y<tile.Data.Length; y++)
                 {
-                    int yCoord = tile.CoordinateSpace.MinY + (y * tile.CellSize);
+                    int yCoord = ((int)tile.CoordinateSpace.MinY) + (y * tile.CellSize);
                     for (int x = 0; x < tile.Data[y].Length; x++)
                     {
-                        Coordinate worldCoord = new Coordinate(tile.CoordinateSpace.MinX + (x * tile.CellSize), yCoord);
-                        Coordinate dataCoord = transform.Transform(worldCoord);
+                        Point worldCoord = new Point(tile.CoordinateSpace.MinX + (x * tile.CellSize), yCoord);
+                        Point dataCoord = transform.Transform(worldCoord);
 
-                        data[dataCoord.Y][dataCoord.X] = tile.Data[y][x];
+                        data[(int)dataCoord.Y][(int)dataCoord.X] = tile.Data[y][x];
                     }
                 }
             }

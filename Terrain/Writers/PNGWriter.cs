@@ -45,7 +45,7 @@ namespace Terrain.Writers
                 {
                     var p1 = transform.Transform(line.Points[i - 1]);
                     var p2 = transform.Transform(line.Points[i]);
-                    g.DrawLine(pen, new PointF(p1.X, p1.Y), new PointF(p2.X, p2.Y));
+                    g.DrawLine(pen, new PointF((float)p1.X, (float)p1.Y), new PointF((float)p2.X, (float)p2.Y));
                 }
             }
         }

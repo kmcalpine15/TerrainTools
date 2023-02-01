@@ -13,7 +13,7 @@ namespace Terrain.Data
         public CoordinateSpace CoordinateSpace { get; private set; }
         
 
-        public TerrainTile(float[][]data, int cellSize, int x, int y)
+        public TerrainTile(float[][]data, int cellSize, double x, double y)
         {
             CellSize = cellSize;
             Data = data;
@@ -24,7 +24,7 @@ namespace Terrain.Data
             YIndex = 0;
         }
 
-        public TerrainTile(float[][]data, int cellSize, int x, int y, int xIndex, int yIndex)
+        public TerrainTile(float[][]data, int cellSize, double x, double y, int xIndex, int yIndex)
         {
             CellSize = cellSize;
             Data = data;
