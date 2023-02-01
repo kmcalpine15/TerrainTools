@@ -14,8 +14,8 @@ namespace Terrain.Data
         public CoordinateSpace From { get; private set; }
         public CoordinateSpace To { get; private set; }
 
-        private double _xScale;
-        private double _yScale;
+        private readonly double _xScale;
+        private readonly double _yScale;
 
         public Transform(CoordinateSpace fromSpace, CoordinateSpace toSpace)
         {

@@ -8,12 +8,11 @@ namespace Terrain.Data
         public int NumRows { get; private set; }
         public int XIndex { get; set; }
         public int YIndex { get; set; }
-        public int CellSize { get; private set; }
+        public double CellSize { get; private set; }
         public float[][] Data { get; private set; }
         public CoordinateSpace CoordinateSpace { get; private set; }
         
-
-        public TerrainTile(float[][]data, int cellSize, double x, double y)
+        public TerrainTile(float[][]data, double cellSize, double x, double y)
         {
             CellSize = cellSize;
             Data = data;
@@ -24,7 +23,7 @@ namespace Terrain.Data
             YIndex = 0;
         }
 
-        public TerrainTile(float[][]data, int cellSize, double x, double y, int xIndex, int yIndex)
+        public TerrainTile(float[][]data, double cellSize, double x, double y, int xIndex, int yIndex)
         {
             CellSize = cellSize;
             Data = data;
@@ -61,7 +60,6 @@ namespace Terrain.Data
                 CoordinateSpace.Top > other.CoordinateSpace.Bottom);
             //return (a_left < b_right && a_right > b_left && a_bottom < b_top && a_top > b_bottom);
         }
-
 
         public IEnumerable<TerrainTile> Split(int newTileSize,float noDataValue=float.MinValue)
         {

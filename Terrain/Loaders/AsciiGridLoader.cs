@@ -4,15 +4,15 @@ namespace Terrain.Loaders
 {
     public class AsciiGridLoader
     {
-
         public AsciiGridLoader()
         {
         }
+
         public async Task<TerrainTile> LoadTerrain(string directory)
         {
             var dirInfo = new DirectoryInfo(directory);
 
-            int cellSize = int.MinValue;
+            double cellSize = double.MinValue;
             CoordinateSpace worldSpace = new CoordinateSpace(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
 
             List<TerrainTile> tiles = new List<TerrainTile>();
@@ -36,12 +36,11 @@ namespace Terrain.Loaders
                 data[i] = new float[(int)dataSpace.Width];
             }
 
-
             foreach(var tile in tiles)
             {
                 for(int y=0; y<tile.Data.Length; y++)
                 {
-                    int yCoord = ((int)tile.CoordinateSpace.MinY) + (y * tile.CellSize);
+                    double yCoord = (tile.CoordinateSpace.MinY) + (y * tile.CellSize);
                     for (int x = 0; x < tile.Data[y].Length; x++)
                     {
                         Point worldCoord = new Point(tile.CoordinateSpace.MinX + (x * tile.CellSize), yCoord);
