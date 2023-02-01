@@ -103,7 +103,7 @@ namespace Terrain.Loaders
             int totalToRead = header.ContentLength * 2;
             for (int i = 0; i < totalToRead; i++)
             {
-                values.Add(new Point { X = reader.ReadDouble(), Y = reader.ReadDouble() });
+                values.Add(new Point (reader.ReadDouble(), reader.ReadDouble() ));
             }
 
             return values.ToArray();
@@ -128,7 +128,7 @@ namespace Terrain.Loaders
             Point[] points = new Point[numPoints];
             for (int i = 0; i < numPoints; i++)
             {
-                points[i] = new Point { X = reader.ReadDouble(), Y = reader.ReadDouble() };
+                points[i] = new Point (reader.ReadDouble(), reader.ReadDouble() );
             }
         }
 
