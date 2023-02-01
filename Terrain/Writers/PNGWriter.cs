@@ -36,15 +36,15 @@ namespace Terrain.Writers
 
         public void Draw(PolyLine line, byte color)
         {
-            var transform = new CoordinateTransform(Tile.CoordinateSpace, new CoordinateSpace(0, 0, Tile.NumColumns, Tile.NumRows));
+            var transform = new Transform(Tile.CoordinateSpace, new CoordinateSpace(0, 0, Tile.NumColumns, Tile.NumRows));
             var pen = new Pen(Brushes.Red,1.0f);
   
             using(var g = Graphics.FromImage(Image))
             {
                 for(int i=1; i<line.Points.Count; i++)
                 {
-                    var p1 = transform.Transform(line.Points[i - 1]);
-                    var p2 = transform.Transform(line.Points[i]);
+                    var p1 = transform.Apply(line.Points[i - 1]);
+                    var p2 = transform.Apply(line.Points[i]);
                     g.DrawLine(pen, new PointF((float)p1.X, (float)p1.Y), new PointF((float)p2.X, (float)p2.Y));
                 }
             }

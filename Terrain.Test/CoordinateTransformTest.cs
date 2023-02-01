@@ -14,12 +14,12 @@ namespace Terrain.Test
             CoordinateSpace from = new CoordinateSpace(fromSpace[0], fromSpace[1], fromSpace[2], fromSpace[3]);
             CoordinateSpace to = new CoordinateSpace(toSpace[0], toSpace[1], toSpace[2], toSpace[3]);
 
-            CoordinateTransform xf = new CoordinateTransform(from, to);
+            Transform xf = new Transform(from, to);
 
             Point testCoord = new Point(coordinate[0], coordinate[1]);
             Point expectedCoord = new Point(expected[0], expected[1]);
 
-            Point result = xf.Transform(testCoord);
+            Point result = xf.Apply(testCoord);
 
             Assert.AreEqual(expectedCoord, result);
         }

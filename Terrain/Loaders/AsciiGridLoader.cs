@@ -28,7 +28,7 @@ namespace Terrain.Loaders
             }
 
             CoordinateSpace dataSpace = new CoordinateSpace(0, 0,worldSpace.Width / cellSize, worldSpace.Height / cellSize);
-            CoordinateTransform transform = new CoordinateTransform(worldSpace, dataSpace);
+            Transform transform = new Transform(worldSpace, dataSpace);
 
             float[][] data = new float[(int)dataSpace.Height][];
             for(int i=0; i<dataSpace.Height; i++)
@@ -45,7 +45,7 @@ namespace Terrain.Loaders
                     for (int x = 0; x < tile.Data[y].Length; x++)
                     {
                         Point worldCoord = new Point(tile.CoordinateSpace.MinX + (x * tile.CellSize), yCoord);
-                        Point dataCoord = transform.Transform(worldCoord);
+                        Point dataCoord = transform.Apply(worldCoord);
 
                         data[(int)dataCoord.Y][(int)dataCoord.X] = tile.Data[y][x];
                     }

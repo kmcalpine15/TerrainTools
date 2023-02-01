@@ -9,7 +9,7 @@ namespace Terrain.Data
     /// <summary>
     /// Represents a tranformation from one coordinate space to another.
     /// </summary>
-    public class CoordinateTransform
+    public class Transform
     {
         public CoordinateSpace From { get; private set; }
         public CoordinateSpace To { get; private set; }
@@ -17,7 +17,7 @@ namespace Terrain.Data
         private double _xScale;
         private double _yScale;
 
-        public CoordinateTransform(CoordinateSpace fromSpace, CoordinateSpace toSpace)
+        public Transform(CoordinateSpace fromSpace, CoordinateSpace toSpace)
         {
             From = fromSpace;
             To = toSpace;
@@ -25,7 +25,7 @@ namespace Terrain.Data
             _yScale = (float)To.Height / From.Height;
         }
         
-        public Point Transform(Point coordinate)
+        public Point Apply(Point coordinate)
         {
             return new Point(
                 (coordinate.X - From.MinX) * _xScale + To.MinX,

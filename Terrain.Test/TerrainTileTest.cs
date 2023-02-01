@@ -24,7 +24,7 @@ namespace Terrain.Test
         [DataTestMethod]
         [DataRow(0.0f, 1000.0f, new float[] { 500.0f, 100.0f, 900.0f }, new float[] { 0.5f, 0.1f, 0.9f })]
         [DataRow(-1000.0f, 1000.0f, new float[] { 0.0f, -500.0f, 500.0f }, new float[] { 0.5f, 0.25f, 0.75f })]
-        public void ShouldNormaliseInto0To1Range(float min, float max, float[] testData, float[] expected )
+        public void Normalise_ShouldNormaliseInto0To1Range(float min, float max, float[] testData, float[] expected )
         {
             float[][] data = new float[1][];
             data[0] = testData;
