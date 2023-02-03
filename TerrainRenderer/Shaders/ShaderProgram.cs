@@ -22,11 +22,19 @@ namespace TerrainRenderer.Shaders
 			GL.ShaderSource(vertexShaderHandle, VertexShader);
 			GL.CompileShader(vertexShaderHandle);
 			string vertshaderLog = GL.GetShaderInfoLog(vertexShaderHandle);
+			if(vertshaderLog != string.Empty)
+			{
+				throw new Exception($"Error compiling vertex shader:\n{vertshaderLog}");
+			}
 
 			int fragmentShaderHandle = GL.CreateShader(ShaderType.FragmentShader);
 			GL.ShaderSource(fragmentShaderHandle, FragmentShader);
 			GL.CompileShader(fragmentShaderHandle);
             string fragmentShaderLog = GL.GetShaderInfoLog(fragmentShaderHandle);
+            if (fragmentShaderLog != string.Empty)
+            {
+                throw new Exception($"Error compiling fragment shader:\n{fragmentShaderLog}");
+            }
 
             ShaderProgramHandle = GL.CreateProgram();
 			GL.AttachShader(ShaderProgramHandle, vertexShaderHandle);
@@ -34,8 +42,13 @@ namespace TerrainRenderer.Shaders
 			GL.LinkProgram(ShaderProgramHandle);
 
 			string log = GL.GetProgramInfoLog(ShaderProgramHandle);
+            if (log != string.Empty)
+            {
+                throw new Exception($"Error linking shader program:\n{log}");
+            }
 
-			GL.DetachShader(ShaderProgramHandle, vertexShaderHandle);
+
+            GL.DetachShader(ShaderProgramHandle, vertexShaderHandle);
 			GL.DetachShader(ShaderProgramHandle, fragmentShaderHandle);
 
 			GL.DeleteShader(vertexShaderHandle);
