@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 namespace TerrainRenderer.Shaders
 {
 	public class ShaderProgram : IDisposable
@@ -9,11 +10,15 @@ namespace TerrainRenderer.Shaders
         public string VertexShader { get; }
 		public string FragmentShader { get; }
 		public int ShaderProgramHandle { get; private set; }
+		public WorldState WorldState { get; private set; }
+		private Dictionary<string, int> _uniformMappings;
 
-		public ShaderProgram(string vertexShader, string fragmentShader)
+
+		public ShaderProgram(string vertexShader, string fragmentShader, WorldState state)
 		{
 			VertexShader = vertexShader;
 			FragmentShader = fragmentShader;
+			WorldState = state;
 		}
 
 		public void Load()
@@ -47,6 +52,17 @@ namespace TerrainRenderer.Shaders
                 throw new Exception($"Error linking shader program:\n{log}");
             }
 
+			_uniformMappings = new Dictionary<string, int>();
+
+            foreach (var worldVariable in WorldState.GetVariableNames())
+			{
+				int variableLocation = GL.GetUniformLocation(ShaderProgramHandle, worldVariable);
+				
+				if(variableLocation != -1)
+				{
+					_uniformMappings.Add(worldVariable, variableLocation);
+				}
+            }
 
             GL.DetachShader(ShaderProgramHandle, vertexShaderHandle);
 			GL.DetachShader(ShaderProgramHandle, fragmentShaderHandle);
@@ -54,6 +70,7 @@ namespace TerrainRenderer.Shaders
 			GL.DeleteShader(vertexShaderHandle);
 			GL.DeleteShader(fragmentShaderHandle);
 		}
+
 
 		public void Unload()
 		{
@@ -65,9 +82,38 @@ namespace TerrainRenderer.Shaders
 			}
 		}
 
-		public void Activate()
+		public void Activate(WorldState state)
 		{
 			GL.UseProgram(this.ShaderProgramHandle);
+
+			foreach(var mapping in _uniformMappings)
+			{
+				var value = state.GetVariable(mapping.Key);
+				ApplyUniform(value);
+			}
+		}
+
+		private void ApplyUniform(WorldVariable variable)
+		{
+			if(variable.Value == null)
+			{
+				return;
+			}
+			
+			switch(variable.Type.Name)
+			{
+				case nameof(Vector3):
+					GL.Uniform3(_uniformMappings[variable.Name], (Vector3)variable.Value);
+					break;
+				case nameof(Vector4):
+					GL.Uniform4(_uniformMappings[variable.Name], (Vector4)variable.Value);
+					break;
+				case nameof(Matrix4):
+					GL.UniformMatrix4(_uniformMappings[variable.Name], (Matrix4)variable.Value);
+					break;
+				default:
+					break;
+			}
 		}
 
 		public void Deactivate()
