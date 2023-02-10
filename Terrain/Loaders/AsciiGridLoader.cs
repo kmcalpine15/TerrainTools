@@ -8,26 +8,26 @@ namespace Terrain.Loaders
         {
         }
 
-        public async Task<TerrainTile> LoadTerrain(string directory)
+        public TerrainTile LoadTerrain(string directory)
         {
             var dirInfo = new DirectoryInfo(directory);
 
             double cellSize = double.MinValue;
-            CoordinateSpace worldSpace = new CoordinateSpace(int.MaxValue, int.MaxValue, int.MinValue, int.MinValue);
+            CoordinateSpace worldSpace = new CoordinateSpace(double.MaxValue, double.MaxValue, double.MinValue, double.MinValue);
 
             List<TerrainTile> tiles = new List<TerrainTile>();
             foreach (var file in dirInfo.GetFiles("*.asc"))
             {
-                var tile = await LoadAsciiFile(file.FullName);
+                var tile = LoadAsciiFile(file.FullName);
                 worldSpace.GrowBounds(tile.CoordinateSpace);
-                if (cellSize == int.MinValue)
+                if (cellSize == double.MinValue)
                 {
                     cellSize = tile.CellSize;
                 }
                 tiles.Add(tile);
             }
 
-            CoordinateSpace dataSpace = new CoordinateSpace(0, 0,worldSpace.Width / cellSize, worldSpace.Height / cellSize);
+            CoordinateSpace dataSpace = new CoordinateSpace(0, 0,(double)(worldSpace.Width / cellSize), (double)(worldSpace.Height / cellSize));
             Transform transform = new Transform(worldSpace, dataSpace);
 
             float[][] data = new float[(int)dataSpace.Height][];
@@ -54,7 +54,7 @@ namespace Terrain.Loaders
             return new TerrainTile(data, cellSize, worldSpace.MinX, worldSpace.MinY);
         }
         
-        private async Task<TerrainTile> LoadAsciiFile(string filePath)
+        private TerrainTile LoadAsciiFile(string filePath)
         {
             var lines = File.ReadAllLines(filePath);
 

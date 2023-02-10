@@ -1,6 +1,10 @@
 ﻿using System;
 using Terrain.Data;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using static System.Formats.Asn1.AsnWriter;
+using System.Transactions;
+using TerrainRenderer.Shaders;
 
 namespace TerrainRenderer
 {
@@ -31,8 +35,8 @@ namespace TerrainRenderer
                 {
                     int idx = (row * Terrain.NumColumns + col) * 3;
                     data[idx] = col * spacing;
-                    data[idx + 1] = row * spacing;
-                    data[idx + 2] = 0.0f;
+                    data[idx + 1] = Terrain.Data[row][col];
+                    data[idx + 2] = row * spacing;
                 }
             }
 
@@ -42,7 +46,7 @@ namespace TerrainRenderer
 
             GL.BindVertexArray(_vertexAttribArrayHandle);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferHandle);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
             GL.BindVertexArray(0);
         }
@@ -52,12 +56,17 @@ namespace TerrainRenderer
 
         }
 
-        public void Draw()
+        public void Draw(ShaderProgram program, WorldState state)
         {
 
-            GL.BindVertexArray(this._vertexAttribArrayHandle);
-            GL.DrawArrays(PrimitiveType.Points, 0, 3);
+            state.SetValue<Matrix4>("matModel", Matrix4.CreateScale(0.001f));
+            program.Activate(state);
+
+            GL.BindVertexArray(_vertexAttribArrayHandle);
+            GL.DrawArrays(PrimitiveType.Points, 0, Terrain.NumColumns * Terrain.NumRows);
             GL.BindVertexArray(0);
+
+            program.Deactivate();
 
         }
 

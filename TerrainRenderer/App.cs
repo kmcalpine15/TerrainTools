@@ -5,6 +5,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
 using TerrainRenderer.Shaders;
+using Terrain.Loaders;
 
 namespace TerrainRenderer
 {
@@ -15,6 +16,7 @@ namespace TerrainRenderer
         private ShaderProgram _shader;
         private Camera _camera;
         private WorldState _state;
+        private Landscape _landscape;
 
 		public App()
 			: base (GameWindowSettings.Default,
@@ -50,14 +52,21 @@ namespace TerrainRenderer
             });
 
             _camera = new Camera(1024, 768);
-            _camera.Position = new Vector3(0.0f, 0.0f, 1.0f);
-            _camera.Target = new Vector3(0.0f, 0.0f, 0.0f);
+            _camera.Position = new Vector3(50.0f, 50.0f, 100.0f);
+            _camera.Target = new Vector3(50.0f, 50.0f, 0.0f);
             _camera.Up = new Vector3(0.0f, 1.0f, 0.0f);
             
             _mesh = new Mesh();
             _mesh.LoadFromArray(exampleData);
             _shader = new ShaderProgram(File.ReadAllText("Shaders/vertex.glsl"), File.ReadAllText("Shaders/fragment.glsl"), _state);
             _shader.Load();
+
+
+            AsciiGridLoader ld = new AsciiGridLoader();
+            string path = "/Users/krismcalpine/personal/mapdata/nt"; 
+            var tile = ld.LoadTerrain(path);
+            _landscape = new Landscape(tile);
+            _landscape.Load();
         }
 
         protected override void OnUnload()
@@ -87,8 +96,8 @@ namespace TerrainRenderer
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            _mesh.Draw(_shader, _state);
-            _shader.Deactivate();
+            //_mesh.Draw(_shader, _state);
+            _landscape.Draw(_shader, _state);
 
             this.Context.SwapBuffers();
             base.OnRenderFrame(args);

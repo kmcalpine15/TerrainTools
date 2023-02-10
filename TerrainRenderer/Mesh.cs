@@ -79,6 +79,8 @@ namespace TerrainRenderer
             GL.BindVertexArray(vertexAttribArrayHandle);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
             GL.BindVertexArray(0);
+
+            program.Deactivate();
         }
     }
 }

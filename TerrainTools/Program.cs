@@ -21,7 +21,7 @@ namespace TerrainTools
             AsciiGridLoader loader = new AsciiGridLoader();
 
             Console.WriteLine($"Loading terrain from {filePath}");
-            var result = await loader.LoadTerrain(filePath);
+            var result = loader.LoadTerrain(filePath);
             Console.WriteLine($"Loaded terrain from {filePath}");
             Console.WriteLine($"Normalising Terrain");
             var normalised = result.Normalise(-135.0f, 1345.0f);
@@ -49,7 +49,7 @@ namespace TerrainTools
 
             Console.WriteLine($"Loading terrain from {filePath}");
             AsciiGridLoader loader = new AsciiGridLoader();
-            var terrain = await loader.LoadTerrain(filePath);
+            var terrain = loader.LoadTerrain(filePath);
             Console.WriteLine($"Loaded terrain from {filePath}");
             Console.WriteLine($"Normalising Terrain");
             var normalised = terrain.Normalise(-135.0f, 1345.0f);

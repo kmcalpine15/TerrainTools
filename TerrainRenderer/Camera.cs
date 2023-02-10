@@ -13,7 +13,7 @@ namespace TerrainRenderer
 		{
 			get
 			{
-                return Matrix4.CreatePerspectiveFieldOfView(0.785398f, ViewWidth / ViewHeight, 1.0f, 10000.0f);
+                return Matrix4.CreatePerspectiveFieldOfView(0.785398f, ViewWidth / ViewHeight, 0.1f, 100000.0f);
             }
 		}
 
