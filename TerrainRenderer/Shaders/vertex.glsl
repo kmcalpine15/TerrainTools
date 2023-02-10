@@ -2,8 +2,11 @@
 
 layout (location = 0) in vec3 aPosition;
 
+uniform mat4 matVP;
+
 void main()
 {
-    gl_Position = vec4(aPosition, 1.0f);
+    vec4 pos = vec4(aPosition, 1.0f);
+    gl_Position = pos * matVP;
 }
 

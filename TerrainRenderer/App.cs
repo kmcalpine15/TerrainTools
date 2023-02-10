@@ -45,10 +45,15 @@ namespace TerrainRenderer
                 new WorldVariable("matView", typeof(Matrix4)),
                 new WorldVariable("matProj", typeof(Matrix4)),
                 new WorldVariable("matModel", typeof(Matrix4)),
-                new WorldVariable("matWVP", typeof(Matrix4))
+                new WorldVariable("matWVP", typeof(Matrix4)),
+                new WorldVariable("matVP", typeof(Matrix4))
             });
 
             _camera = new Camera(1024, 768);
+            _camera.Position = new Vector3(0.0f, 0.0f, 1.0f);
+            _camera.Target = new Vector3(0.0f, 0.0f, 0.0f);
+            _camera.Up = new Vector3(0.0f, 1.0f, 0.0f);
+            
             _mesh = new Mesh();
             _mesh.LoadFromArray(exampleData);
             _shader = new ShaderProgram(File.ReadAllText("Shaders/vertex.glsl"), File.ReadAllText("Shaders/fragment.glsl"), _state);
@@ -71,6 +76,11 @@ namespace TerrainRenderer
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
+            _camera.Position = _camera.Position + new Vector3(0.0f, 0.0f, (float)(0.1 * args.Time));
+
+            _state.SetValue<Matrix4>("matView", _camera.ViewMatrix);
+            _state.SetValue<Matrix4>("matProj", _camera.ProjectionMatrix);
+            _state.SetValue<Matrix4>("matVP", _camera.ViewMatrix * _camera.ProjectionMatrix);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
