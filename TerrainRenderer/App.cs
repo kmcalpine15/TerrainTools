@@ -53,7 +53,7 @@ namespace TerrainRenderer
 
             _camera = new Camera(1024, 768);
             _camera.Position = new Vector3(50.0f, 50.0f, 100.0f);
-            _camera.Target = new Vector3(50.0f, 50.0f, 0.0f);
+            _camera.Target = new Vector3(0.0f, 0.0f, 0.0f);
             _camera.Up = new Vector3(0.0f, 1.0f, 0.0f);
             
             _mesh = new Mesh();
@@ -85,7 +85,7 @@ namespace TerrainRenderer
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
-            _camera.Position = _camera.Position + new Vector3(0.0f, 0.0f, (float)(0.1 * args.Time));
+            _camera.Position = _camera.Position + new Vector3(0.0f, 0.0f, (float)(20.0f * args.Time));
 
             _state.SetValue<Matrix4>("matView", _camera.ViewMatrix);
             _state.SetValue<Matrix4>("matProj", _camera.ProjectionMatrix);
@@ -95,7 +95,7 @@ namespace TerrainRenderer
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
-
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
             //_mesh.Draw(_shader, _state);
             _landscape.Draw(_shader, _state);
 
