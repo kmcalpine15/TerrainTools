@@ -13,6 +13,8 @@ namespace TerrainRenderer
 
         private Mesh _mesh;
         private ShaderProgram _shader;
+        private Camera _camera;
+        private WorldState _state;
 
 		public App()
 			: base (GameWindowSettings.Default,
@@ -21,7 +23,7 @@ namespace TerrainRenderer
 				APIVersion = new Version(4,1),
 				Profile = ContextProfile.Core,
 				Flags = ContextFlags.ForwardCompatible,
-				Size = new OpenTK.Mathematics.Vector2i(640,480)
+				Size = new OpenTK.Mathematics.Vector2i(1024,768)
 			})
 		{
             this.CenterWindow();
@@ -39,9 +41,17 @@ namespace TerrainRenderer
                 -0.5f, -0.5f, 0f
             };
 
+            _state = new WorldState(new WorldVariable[]{
+                new WorldVariable("matView", typeof(Matrix4)),
+                new WorldVariable("matProj", typeof(Matrix4)),
+                new WorldVariable("matModel", typeof(Matrix4)),
+                new WorldVariable("matWVP", typeof(Matrix4))
+            });
+
+            _camera = new Camera(1024, 768);
             _mesh = new Mesh();
             _mesh.LoadFromArray(exampleData);
-            _shader = new ShaderProgram(File.ReadAllText("Shaders/vertex.glsl"), File.ReadAllText("Shaders/fragment.glsl"));
+            _shader = new ShaderProgram(File.ReadAllText("Shaders/vertex.glsl"), File.ReadAllText("Shaders/fragment.glsl"), _state);
             _shader.Load();
         }
 
@@ -67,8 +77,7 @@ namespace TerrainRenderer
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            _shader.Activate();
-            _mesh.Draw();
+            _mesh.Draw(_shader, _state);
             _shader.Deactivate();
 
             this.Context.SwapBuffers();

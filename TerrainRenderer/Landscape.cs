@@ -4,8 +4,8 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace TerrainRenderer
 {
-	public class Landscape : IDisposable
-	{
+    public class Landscape : IDisposable
+    {
         private bool disposedValue;
         private int _vertexBufferHandle;
         private int _vertexAttribArrayHandle;
@@ -13,9 +13,9 @@ namespace TerrainRenderer
         public TerrainTile Terrain { get; }
 
         public Landscape(TerrainTile terrain)
-		{
+        {
             Terrain = terrain;
-		}
+        }
 
         public void Load()
         {
@@ -25,9 +25,9 @@ namespace TerrainRenderer
             float[] data = new float[Terrain.NumColumns * Terrain.NumRows * 3];
             float spacing = (float)Terrain.CellSize;
 
-            for(int row = 0; row < Terrain.NumRows; row++)
+            for (int row = 0; row < Terrain.NumRows; row++)
             {
-                for(int col = 0; col < Terrain.NumColumns; col++)
+                for (int col = 0; col < Terrain.NumColumns; col++)
                 {
                     int idx = (row * Terrain.NumColumns + col) * 3;
                     data[idx] = col * spacing;
@@ -54,11 +54,11 @@ namespace TerrainRenderer
 
         public void Draw()
         {
-            
-                GL.BindVertexArray(this._vertexAttribArrayHandle);
-                GL.DrawArrays(PrimitiveType.Points, 0, 3);
-                GL.BindVertexArray(0);
-            
+
+            GL.BindVertexArray(this._vertexAttribArrayHandle);
+            GL.DrawArrays(PrimitiveType.Points, 0, 3);
+            GL.BindVertexArray(0);
+
         }
 
         #region IDisposable

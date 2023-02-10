@@ -109,7 +109,8 @@ namespace TerrainRenderer.Shaders
 					GL.Uniform4(_uniformMappings[variable.Name], (Vector4)variable.Value);
 					break;
 				case nameof(Matrix4):
-					GL.UniformMatrix4(_uniformMappings[variable.Name], (Matrix4)variable.Value);
+					Matrix4 variableValue = (Matrix4)variable.Value;
+					GL.UniformMatrix4(_uniformMappings[variable.Name], false, ref variableValue);
 					break;
 				default:
 					break;

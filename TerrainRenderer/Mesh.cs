@@ -1,16 +1,23 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL4;
+using TerrainRenderer.Shaders;
+using OpenTK.Mathematics;
+
 namespace TerrainRenderer
 {
-	public class Mesh : IDisposable
-	{
+    public class Mesh : IDisposable
+    {
         private bool disposedValue;
-        private int vertexBufferHandle=-1;
+        private int vertexBufferHandle = -1;
         private int vertexAttribArrayHandle = -1;
 
+        public Matrix4 Translation { get; set; }
+        public Matrix4 Rotation { get; set; }
+        public Matrix4 Scale { get; set; }
+
         public Mesh()
-		{
-		}
+        {
+        }
 
         #region Disposable
         protected virtual void Dispose(bool disposing)
@@ -22,7 +29,7 @@ namespace TerrainRenderer
                     // TODO: dispose managed state (managed objects)
                 }
 
-                if(vertexBufferHandle == -1)
+                if (vertexBufferHandle == -1)
                 {
                     GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
                     GL.DeleteBuffer(vertexBufferHandle);
@@ -64,8 +71,11 @@ namespace TerrainRenderer
             GL.BindVertexArray(0);
         }
 
-        public void Draw()
+        public void Draw(ShaderProgram program, WorldState state)
         {
+            state.SetValue<Matrix4>("matModel", Scale * Rotation * Translation);
+            program.Activate(state);
+            
             GL.BindVertexArray(vertexAttribArrayHandle);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
             GL.BindVertexArray(0);
