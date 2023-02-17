@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R16ToPng", "R16ToPng\R16ToP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainRenderer", "TerrainRenderer\TerrainRenderer.csproj", "{C7E6EDF5-07C1-4EEE-98FC-7216C9C709B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrainRenderer.Test", "TerrainRenderer.Test\TerrainRenderer.Test.csproj", "{C48FC367-6080-455C-B019-3EF6DC95DDBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C7E6EDF5-07C1-4EEE-98FC-7216C9C709B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7E6EDF5-07C1-4EEE-98FC-7216C9C709B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7E6EDF5-07C1-4EEE-98FC-7216C9C709B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C48FC367-6080-455C-B019-3EF6DC95DDBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C48FC367-6080-455C-B019-3EF6DC95DDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C48FC367-6080-455C-B019-3EF6DC95DDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C48FC367-6080-455C-B019-3EF6DC95DDBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

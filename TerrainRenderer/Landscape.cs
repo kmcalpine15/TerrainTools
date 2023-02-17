@@ -22,12 +22,8 @@ namespace TerrainRenderer
             Terrain = terrain;
         }
 
-        public void Load()
-        {
-            this._vertexBufferHandle = GL.GenBuffer();
-            this._vertexAttribArrayHandle = GL.GenVertexArray();
-            this._indexBufferHandle = GL.GenBuffer();
-
+        public float[] GenerateVertices()
+	    {
             float[] data = new float[Terrain.NumColumns * Terrain.NumRows * 3];
             float spacing = (float)Terrain.CellSize;
 
@@ -41,9 +37,13 @@ namespace TerrainRenderer
                     data[idx + 2] = row * spacing;
                 }
             }
+            return data;
+        }
 
+        public Vector3i[] GenerateIndices()
+        {
             List<Vector3i> indices = new List<Vector3i>();
-            for(int quadY =0; quadY < Terrain.NumRows - 1; quadY++)
+            for (int quadY = 0; quadY < Terrain.NumRows - 1; quadY++)
             {
                 for (int quadX = 0; quadX < Terrain.NumColumns - 1; quadX++)
                 {
@@ -59,14 +59,25 @@ namespace TerrainRenderer
                         quadY * Terrain.NumColumns + quadX
                     ));
                 }
-	        }
+            }
+            return indices.ToArray();
+        }
+
+        public void Load()
+        {
+            this._vertexBufferHandle = GL.GenBuffer();
+            this._vertexAttribArrayHandle = GL.GenVertexArray();
+            this._indexBufferHandle = GL.GenBuffer();
+
+            var data = GenerateVertices();
+            var indices = GenerateIndices();
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferHandle);
             GL.BufferData(BufferTarget.ArrayBuffer, data.Length * sizeof(float), data, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferHandle);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, Vector3i.SizeInBytes * indices.Count, indices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, Vector3i.SizeInBytes * indices.Length, indices.ToArray(), BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
             GL.BindVertexArray(_vertexAttribArrayHandle);
@@ -79,7 +90,12 @@ namespace TerrainRenderer
 
         public void Unload()
         {
-
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.DeleteBuffer(_vertexBufferHandle);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            GL.DeleteBuffer(_indexBufferHandle);
+            GL.BindVertexArray(0);
+            GL.DeleteVertexArray(_vertexAttribArrayHandle);
         }
 
         public void Draw(ShaderProgram program, WorldState state)

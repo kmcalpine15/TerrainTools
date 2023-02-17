@@ -6,6 +6,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Mathematics;
 using TerrainRenderer.Shaders;
 using Terrain.Loaders;
+using System.Drawing;
 
 namespace TerrainRenderer
 {
@@ -14,7 +15,7 @@ namespace TerrainRenderer
 
         private Mesh _mesh;
         private ShaderProgram _shader;
-        private Camera _camera;
+        private SimpleCamera _camera;
         private WorldState _state;
         private Landscape _landscape;
 
@@ -35,7 +36,7 @@ namespace TerrainRenderer
         {
             base.OnLoad();
             GL.ClearColor(Color4.Blue);
-
+            CursorState = CursorState.Grabbed;
             var exampleData = new float[]
             {
                 0.0f, 0.5f, 0f,
@@ -51,9 +52,9 @@ namespace TerrainRenderer
                 new WorldVariable("matVP", typeof(Matrix4))
             });
 
-            _camera = new Camera(1024, 768);
+            _camera = new SimpleCamera(1024, 768, 24.0f);
             _camera.Position = new Vector3(50.0f, 50.0f, 100.0f);
-            _camera.Target = new Vector3(0.0f, 0.0f, 0.0f);
+            _camera.Target = new Vector3(0.0f, 0.0f, -1.0f);
             _camera.Up = new Vector3(0.0f, 1.0f, 0.0f);
             
             _mesh = new Mesh();
@@ -81,12 +82,55 @@ namespace TerrainRenderer
             GL.Viewport(0, 0, e.Width, e.Height);
             base.OnResize(e);
         }
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            base.OnMouseMove(e);
+        }
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
-            _camera.Position = _camera.Position + new Vector3(0.0f, 0.0f, (float)(20.0f * args.Time));
+            if (!IsFocused) // check to see if the window is focused
+            {
+                return;
+            }
 
+            _camera.Update(MouseState.Delta.X, MouseState.Delta.Y, (float)args.Time);
+
+            KeyboardState input = KeyboardState;
+            var speed = 10.0f;
+
+            
+            if (input.IsKeyDown(Keys.W))
+            {
+                _camera.Position += _camera.Target * speed * (float)args.Time; //Forward 
+            }
+
+            if (input.IsKeyDown(Keys.S))
+            {
+                _camera.Position -= _camera.Target * speed * (float)args.Time; //Forward 
+            }
+
+            if (input.IsKeyDown(Keys.A))
+            {
+                _camera.Position -= Vector3.Normalize(Vector3.Cross(_camera.Target, _camera.Up)) * speed * (float)args.Time;
+            }
+
+            if (input.IsKeyDown(Keys.D))
+            {
+                _camera.Position += Vector3.Normalize(Vector3.Cross(_camera.Target, _camera.Up)) * speed * (float)args.Time;
+            }
+
+            if (input.IsKeyDown(Keys.Space))
+            {
+                _camera.Position += _camera.Up * speed * (float)args.Time;
+            }
+
+            if (input.IsKeyDown(Keys.LeftShift))
+            {
+                _camera.Position -= _camera.Up * speed * (float)args.Time;
+            }
+        
             _state.SetValue<Matrix4>("matView", _camera.ViewMatrix);
             _state.SetValue<Matrix4>("matProj", _camera.ProjectionMatrix);
             _state.SetValue<Matrix4>("matVP", _camera.ViewMatrix * _camera.ProjectionMatrix);
