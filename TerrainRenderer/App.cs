@@ -59,9 +59,9 @@ namespace TerrainRenderer
                 new WorldVariable("matVP", typeof(Matrix4))
             });
 
-            _camera = new SimpleCamera(1024, 768, 24.0f);
+            _camera = new SimpleCamera(1024, 768, 24.0f, 100.0f);
             _camera.Position = new Vector3(0.0f, 0.0f, 1.0f);
-            _camera.Target = new Vector3(0.0f, 0.0f, -1.0f);
+            _camera.Forward = new Vector3(0.0f, 0.0f, -1.0f);
             _camera.Up = new Vector3(0.0f, 1.0f, 0.0f);
             
             _mesh = new Mesh();
@@ -109,7 +109,7 @@ namespace TerrainRenderer
             _camera.Update(MouseState.Delta.X, MouseState.Delta.Y, (float)args.Time);
 
             KeyboardState input = KeyboardState;
-            var speed = 100.0f;
+
 
             if (input.IsKeyDown(Keys.Escape))
             {
@@ -118,22 +118,22 @@ namespace TerrainRenderer
 
             if (input.IsKeyDown(Keys.W))
             {
-                _camera.Position += _camera.Target * speed * (float)args.Time; //Forward 
+                _camera.MoveForward((float)args.Time);
             }
 
             if (input.IsKeyDown(Keys.S))
             {
-                _camera.Position -= _camera.Target * speed * (float)args.Time; //Forward 
+                _camera.MoveBackward((float)args.Time);
             }
 
             if (input.IsKeyDown(Keys.A))
             {
-                _camera.Position -= Vector3.Normalize(Vector3.Cross(_camera.Target, _camera.Up)) * speed * (float)args.Time;
+                _camera.Position -= Vector3.Normalize(Vector3.Cross(_camera.Forward, _camera.Up)) * speed * (float)args.Time;
             }
 
             if (input.IsKeyDown(Keys.D))
             {
-                _camera.Position += Vector3.Normalize(Vector3.Cross(_camera.Target, _camera.Up)) * speed * (float)args.Time;
+                _camera.Position += Vector3.Normalize(Vector3.Cross(_camera.Forward, _camera.Up)) * speed * (float)args.Time;
             }
 
             if (input.IsKeyDown(Keys.Space))
