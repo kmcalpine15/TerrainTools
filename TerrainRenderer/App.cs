@@ -100,7 +100,11 @@ namespace TerrainRenderer
             KeyboardState input = KeyboardState;
             var speed = 10.0f;
 
-            
+            if (input.IsKeyDown(Keys.Escape))
+            {
+                this.Close();
+            }
+
             if (input.IsKeyDown(Keys.W))
             {
                 _camera.Position += _camera.Target * speed * (float)args.Time; //Forward 
