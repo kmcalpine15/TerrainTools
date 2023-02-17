@@ -14,6 +14,7 @@ namespace TerrainRenderer
         private int _vertexBufferHandle;
         private int _vertexAttribArrayHandle;
         private int _indexBufferHandle;
+        private int _numTriangles;
 
         public TerrainTile Terrain { get; }
 
@@ -34,30 +35,26 @@ namespace TerrainRenderer
                     int idx = (row * Terrain.NumColumns + col) * 3;
                     data[idx] = col * spacing;
                     data[idx + 1] = Terrain.Data[row][col];
-                    data[idx + 2] = row * spacing;
+                    data[idx + 2] = -(row * spacing);
                 }
             }
             return data;
         }
 
-        public Vector3i[] GenerateIndices()
+        public ushort[] GenerateIndices()
         {
-            List<Vector3i> indices = new List<Vector3i>();
+            List<ushort> indices = new List<ushort>();
             for (int quadY = 0; quadY < Terrain.NumRows - 1; quadY++)
             {
                 for (int quadX = 0; quadX < Terrain.NumColumns - 1; quadX++)
                 {
-                    indices.Add(new Vector3i(
-                        quadY * Terrain.NumColumns + quadX,
-                        (quadY + 1) * Terrain.NumColumns + quadX,
-                        (quadY + 1) * Terrain.NumColumns + quadX + 1
-                    ));
+                    indices.Add((ushort)(quadY * Terrain.NumColumns + quadX));
+                    indices.Add((ushort)((quadY + 1) * Terrain.NumColumns + quadX));
+                    indices.Add((ushort)((quadY + 1) * Terrain.NumColumns + quadX + 1));
 
-                    indices.Add(new Vector3i(
-                        (quadY + 1) * Terrain.NumColumns + quadX + 1,
-                        quadY * Terrain.NumColumns + quadX + 1,
-                        quadY * Terrain.NumColumns + quadX
-                    ));
+                    indices.Add((ushort)((quadY + 1) * Terrain.NumColumns + quadX + 1));
+                    indices.Add((ushort)(quadY * Terrain.NumColumns + quadX + 1));
+                    indices.Add((ushort)(quadY * Terrain.NumColumns + quadX));
                 }
             }
             return indices.ToArray();
@@ -77,15 +74,17 @@ namespace TerrainRenderer
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferHandle);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, Vector3i.SizeInBytes * indices.Length, indices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(ushort) * indices.Length, indices, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 
             GL.BindVertexArray(_vertexAttribArrayHandle);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferHandle);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferHandle);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, sizeof(float), 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, sizeof(float)*3, 0);
             GL.EnableVertexAttribArray(0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferHandle);
             GL.BindVertexArray(0);
+
+            _numTriangles = indices.Length / 3;
         }
 
         public void Unload()
@@ -100,16 +99,14 @@ namespace TerrainRenderer
 
         public void Draw(ShaderProgram program, WorldState state)
         {
-
             state.SetValue<Matrix4>("matModel", Matrix4.CreateScale(0.001f));
             program.Activate(state);
 
             GL.BindVertexArray(_vertexAttribArrayHandle);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, ((Terrain.NumColumns -1) + (Terrain.NumRows-1)) * 2);
+            GL.DrawElements(BeginMode.Triangles, _numTriangles, DrawElementsType.UnsignedShort, 0);
             GL.BindVertexArray(0);
 
             program.Deactivate();
-
         }
 
         #region IDisposable

@@ -19,6 +19,7 @@ namespace TerrainRenderer.Shaders
 			VertexShader = vertexShader;
 			FragmentShader = fragmentShader;
 			WorldState = state;
+			_uniformMappings = new Dictionary<string, int>();
 		}
 
 		public void Load()

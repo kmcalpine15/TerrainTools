@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using TerrainRenderer.Shaders;
 using Terrain.Loaders;
 using System.Drawing;
+using Terrain.Data;
 
 namespace TerrainRenderer
 {
@@ -20,13 +21,18 @@ namespace TerrainRenderer
         private Landscape _landscape;
 
 		public App()
-			: base (GameWindowSettings.Default,
+			: base (new GameWindowSettings
+            {
+                RenderFrequency = 60,
+                UpdateFrequency = 60
+            },
 				  new NativeWindowSettings
 			{
 				APIVersion = new Version(4,1),
 				Profile = ContextProfile.Core,
 				Flags = ContextFlags.ForwardCompatible,
-				Size = new OpenTK.Mathematics.Vector2i(1024,768)
+				Size = new OpenTK.Mathematics.Vector2i(1024,768),
+                
 			})
 		{
             this.CenterWindow();
@@ -36,6 +42,7 @@ namespace TerrainRenderer
         {
             base.OnLoad();
             GL.ClearColor(Color4.Blue);
+            GL.FrontFace(FrontFaceDirection.Cw);
             CursorState = CursorState.Grabbed;
             var exampleData = new float[]
             {
@@ -53,7 +60,7 @@ namespace TerrainRenderer
             });
 
             _camera = new SimpleCamera(1024, 768, 24.0f);
-            _camera.Position = new Vector3(50.0f, 50.0f, 100.0f);
+            _camera.Position = new Vector3(0.0f, 0.0f, 1.0f);
             _camera.Target = new Vector3(0.0f, 0.0f, -1.0f);
             _camera.Up = new Vector3(0.0f, 1.0f, 0.0f);
             
@@ -66,6 +73,10 @@ namespace TerrainRenderer
             AsciiGridLoader ld = new AsciiGridLoader();
             string path = "/Users/krismcalpine/personal/mapdata/nt"; 
             var tile = ld.LoadTerrain(path);
+            float[][] data = new float[2][];
+            data[0] = new float[2] { 0.0f, 0.0f };
+            data[1] = new float[2] { 0.0f, 0.0f };
+            var tile2 = new TerrainTile(data, 10, 0, 0);
             _landscape = new Landscape(tile);
             _landscape.Load();
         }
@@ -98,7 +109,7 @@ namespace TerrainRenderer
             _camera.Update(MouseState.Delta.X, MouseState.Delta.Y, (float)args.Time);
 
             KeyboardState input = KeyboardState;
-            var speed = 10.0f;
+            var speed = 100.0f;
 
             if (input.IsKeyDown(Keys.Escape))
             {

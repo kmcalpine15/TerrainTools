@@ -7,6 +7,6 @@ uniform mat4 matVP;
 void main()
 {
     vec4 pos = vec4(aPosition, 1.0f);
-    gl_Position = pos * matVP;
+    gl_Position = matVP * pos;
 }
 

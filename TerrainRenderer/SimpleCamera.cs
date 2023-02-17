@@ -12,7 +12,7 @@ namespace TerrainRenderer
 		public int ViewWidth { get; set; }
 		public int ViewHeight { get; set; }
 		private float _pitch=0.0f;
-		private float _yaw=0.0f;
+		private float _yaw=-90.0f;
 		public float Sensitivity{ get; set; }
 
 		public Matrix4 ProjectionMatrix { get; private set; }
@@ -21,7 +21,7 @@ namespace TerrainRenderer
 		{
 			get
 			{
-				return Matrix4.LookAt(Position, Target, Up);
+				return Matrix4.LookAt(Position, Position + Target, Up);
 			}
 		}
 
@@ -30,30 +30,26 @@ namespace TerrainRenderer
 			ViewWidth = viewWidth;
 			ViewHeight = viewHeight;
 			Sensitivity = 1.0f;
-
-			var diagonal = Math.Tan(viewWidth / viewHeight);
-			var fov = (float)Math.Atan(diagonal / (2.0f * focalLength));
-			ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(fov, viewWidth / viewHeight, 1.0f, 10000.0f);
+            ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)viewWidth / (float)viewHeight, 1.0f, 10000.0f);
 		}
 
 		public void Update(float mouseDeltaX, float mouseDeltaY, float timeElapsed)
 		{
+   //         _pitch += mouseDeltaY * Sensitivity;
+
    //         if (_pitch > 89.0f) { _pitch = 89.0f; }
-   //         else if (_pitch < -89.0f) { _pitch = -89.0f; }
-   //         else
-   //         {
-   //             _pitch = mouseDeltaY * Sensitivity * timeElapsed;
-   //         }
+			//else if (_pitch < -89.0f) { _pitch = -89.0f; }
 
-			//_yaw = mouseDeltaX * Sensitivity * timeElapsed;
+			//_yaw += mouseDeltaX * Sensitivity;
 
-			//Target = new Vector3((float)Math.Cos(MathHelper.DegreesToRadians(_pitch)) * (float)Math.Cos(MathHelper.DegreesToRadians(_yaw)),
+			//Target = new Vector3(
+			//	(float)Math.Cos(MathHelper.DegreesToRadians(_pitch)) * (float)Math.Cos(MathHelper.DegreesToRadians(_yaw)),
 			//	(float)Math.Sin(MathHelper.DegreesToRadians(_pitch)),
 			//	(float)Math.Cos(MathHelper.DegreesToRadians(_pitch) * (float)Math.Sin(MathHelper.DegreesToRadians(_yaw)))
 			//	);
 
-			//Target.Normalize();
-        }
+			//Target = Vector3.Normalize(Target);
+		}
 	}
 }
 
