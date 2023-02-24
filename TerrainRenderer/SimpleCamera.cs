@@ -52,8 +52,23 @@ namespace TerrainRenderer
 
 		public void MoveLeft(float timeElapsed)
 		{
+            Position -= Vector3.Normalize(Vector3.Cross(Forward, Up)) * Speed * timeElapsed;
+        }
 
-		}
+        public void MoveRight(float timeElapsed)
+        {
+            Position += Vector3.Normalize(Vector3.Cross(Forward, Up)) * Speed * timeElapsed;
+        }
+
+		public void MoveUp(float timeElapsed)
+		{
+            Position += Up * Speed * timeElapsed;
+        }
+
+        public void MoveDown(float timeElapsed)
+        {
+            Position -= Up * Speed * timeElapsed;
+        }
 
 
         public void Update(float mouseDeltaX, float mouseDeltaY, float timeElapsed)

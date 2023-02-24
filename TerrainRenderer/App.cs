@@ -109,7 +109,7 @@ namespace TerrainRenderer
             _camera.Update(MouseState.Delta.X, MouseState.Delta.Y, (float)args.Time);
 
             KeyboardState input = KeyboardState;
-
+            float time = (float)args.Time;
 
             if (input.IsKeyDown(Keys.Escape))
             {
@@ -118,32 +118,32 @@ namespace TerrainRenderer
 
             if (input.IsKeyDown(Keys.W))
             {
-                _camera.MoveForward((float)args.Time);
+                _camera.MoveForward(time);
             }
 
             if (input.IsKeyDown(Keys.S))
             {
-                _camera.MoveBackward((float)args.Time);
+                _camera.MoveBackward(time);
             }
 
             if (input.IsKeyDown(Keys.A))
             {
-                _camera.Position -= Vector3.Normalize(Vector3.Cross(_camera.Forward, _camera.Up)) * speed * (float)args.Time;
+                _camera.MoveLeft(time);
             }
 
             if (input.IsKeyDown(Keys.D))
             {
-                _camera.Position += Vector3.Normalize(Vector3.Cross(_camera.Forward, _camera.Up)) * speed * (float)args.Time;
+                _camera.MoveRight(time);
             }
 
             if (input.IsKeyDown(Keys.Space))
             {
-                _camera.Position += _camera.Up * speed * (float)args.Time;
+                _camera.MoveUp(time);
             }
 
             if (input.IsKeyDown(Keys.LeftShift))
             {
-                _camera.Position -= _camera.Up * speed * (float)args.Time;
+                _camera.MoveDown(time);
             }
         
             _state.SetValue<Matrix4>("matView", _camera.ViewMatrix);
