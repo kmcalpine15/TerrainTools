@@ -19,4 +19,7 @@
     <ProjectReference Include="..\Terrain\Terrain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="CoordinateSpace.Test" />
+  </ItemGroup>
 </Project>

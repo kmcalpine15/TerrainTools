@@ -3,7 +3,7 @@ using Terrain.Data;
 namespace Terrain.Test
 {
     [TestClass]
-    public class CoordinateSpaceTest
+    public class TransformTest
     {
         [DataTestMethod]
         [DataRow(new int[] { 0, 0, 10, 10 }, new int[] { -5, -5, 5, 5 }, new int[] { 5, 5 }, new int[] {0, 0})]

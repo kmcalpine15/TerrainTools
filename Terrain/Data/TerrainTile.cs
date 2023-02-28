@@ -61,7 +61,7 @@ namespace Terrain.Data
             //return (a_left < b_right && a_right > b_left && a_bottom < b_top && a_top > b_bottom);
         }
 
-        public IEnumerable<TerrainTile> Split(int newTileSize,float noDataValue=float.MinValue)
+        public IEnumerable<TerrainTile> Split(int newTileSize,float noDataValue=0.0f)
         {
             int numTilesX = NumColumns % newTileSize > 0 ? (NumColumns / newTileSize) + 1 : NumColumns / newTileSize;
             int numTilesY = NumRows % newTileSize > 0 ? (NumRows / newTileSize) + 1 : NumRows / newTileSize;

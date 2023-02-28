@@ -34,5 +34,19 @@ namespace Terrain.Data
             if (other.MaxY > MaxY) { MaxY = other.MaxY; }
             if (other.MinY < MinY) { MinY = other.MinY; }
         }
+
+        public IEnumerable<Point> GetIntersectingPoints(IEnumerable<Point> points)
+        {
+            List<Point> result = new List<Point>();
+            foreach(var point in points)
+            {
+                if(!(point.X < MinX || point.X > MaxX || point.Y < MinY || point.Y > MaxY))
+                {
+                    result.Add(point);
+                }
+            }
+
+            return result;
+        }
     }
 }
